@@ -30,7 +30,7 @@ Langkah diatas dilakukan untuk menjalankan server zookeeper di port **2181** dan
 ```
 Langkah diatas dilakukan untuk membuat Topic Kafka baru dengan nama *mytopic* dengan jumlah partisi *1* dengan faktor replikasi sebanyak *1*
 
-## Step 2: Git Clone code dari GitHub saya
+## Step 2: Clone code dari GitHub saya
 Download source code dari repository [GitHub](https://github.com/erfinfeluzy/training-spring-sse-kafka.git) saya:
 ```bash
 > git clone https://github.com/erfinfeluzy/training-spring-sse-kafka.git
@@ -38,8 +38,10 @@ Download source code dari repository [GitHub](https://github.com/erfinfeluzy/tra
 > mvn spring-boot:run
 ```
 Struktur code sebagai berikut:
+![code structure](https://github.com/erfinfeluzy/training-spring-sse-kafka/blob/master/code-structure.png?raw=true)
 
 Buka browser dengan url [http://localhost:8080](http://localhost:8080). akan terlihat halaman sbb:
+![code structure](https://github.com/erfinfeluzy/training-spring-sse-kafka/blob/master/result-on-browser.png?raw=true)
 
 > Note: Untuk browser modern (eg: Chrome, Safari,etc) sudah mensupport untuk Server Sent Event (SSE). Hal ini mungkin tidak berjalan di IE :)
 
