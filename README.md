@@ -37,10 +37,12 @@ Download source code dari repository [GitHub](https://github.com/erfinfeluzy/tra
 > cd training-spring-sse-kafka.git
 > mvn spring-boot:run
 ```
-Struktur code sebagai berikut:
+Struktur code sebagai berikut:\
+
 ![code structure](https://github.com/erfinfeluzy/training-spring-sse-kafka/blob/master/code-structure.png?raw=true)
 
-Buka browser dengan url [http://localhost:8080](http://localhost:8080). akan terlihat halaman sbb:
+Buka browser dengan url [http://localhost:8080](http://localhost:8080). akan terlihat halaman sbb:\
+
 ![code structure](https://github.com/erfinfeluzy/training-spring-sse-kafka/blob/master/result-on-browser.png?raw=true)
 
 > Note: Untuk browser modern (eg: Chrome, Safari,etc) sudah mensupport untuk Server Sent Event (SSE). Hal ini mungkin tidak berjalan di IE :)
