@@ -83,3 +83,122 @@ public class KafkaConsumerConfig {
 
 }
 ```
+### Konfigurasi Kafka Producer
+```java
+@Configuration
+public class KafkaProducerConfig {
+
+	@Bean
+	public ProducerFactory<String, String> producerFactory() {
+		Map<String, Object> configProps = new HashMap<>();
+		configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+		configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+		configProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+		return new DefaultKafkaProducerFactory<>(configProps);
+	}
+
+	@Bean
+	public KafkaTemplate<String, String> kafkaTemplate() {
+		return new KafkaTemplate<>(producerFactory());
+	}
+}
+```
+
+### Publish Random message ke Topic Kafka setiap 5 detik
+
+Snippet berikut pada file *KafkaTopicGenerator.java* untuk mempublish random data ke Topic dengan nama **mytopic**.
+```java
+@Async
+@Scheduled(fixedRate = 5000)
+public void doNotify() throws IOException {
+
+	//randomly generate kafka message to topic:mytopic every 5 seconds
+	kafkaTemplate.send("mytopic", "Data tanggal : " + new Date () + "; id : " + UUID.randomUUID() );
+}
+```
+
+### Consume Topic Kafka dan teruskan ke Server Send Event emitter.
+Snippet dibawah untuk subscribe ke topic **mytopic**.
+```java
+@KafkaListener(topics = "mytopic", groupId = "consumer-group-id-1")
+public void listen(@Payload String message, @Header(KafkaHeaders.OFFSET) String offset) {
+
+	//process incoming message from kafka
+	doNotify("Kafka Offset=" + offset + "; message=" + message);	
+}
+```
+Kemudian data dari topic di teruskan ke SSE emitter.
+```java
+private void doNotify(String message) {
+	List<SseEmitter> deadEmitters = new ArrayList<>();
+		
+	emitters.forEach(emitter -> {
+		try {
+			//send message to frontend
+			emitter
+				.send(SseEmitter.event()
+					.data(message));
+				
+		} catch (Exception e) {
+			deadEmitters.add(emitter);
+		}
+	});
+	
+	emitters.removeAll(deadEmitters);
+}
+```
+### Create Controller untuk melakukan stream SSE
+Snippet berikut untuk melakukan stream data via http dengan menggunakan SSE pada endpoint **/stream**.
+```java
+@RestController
+public class StreamController {
+	
+	@Autowired
+	KafkaConsumer kafkaConsumer;
+
+	@GetMapping("/stream")
+	SseEmitter  stream() throws IOException {
+
+		final SseEmitter emitter = new SseEmitter();
+		kafkaConsumer.addEmitter(emitter);
+		
+		emitter.onCompletion(() -> kafkaConsumer.removeEmitter(emitter));
+		emitter.onTimeout(() -> kafkaConsumer.removeEmitter(emitter));
+		
+		return emitter;
+
+	}
+
+}
+```
+Hasil dapat dicek dengan menggunakan perintah curl
+```bash
+curl http://localhost:8080/stream
+```
+### Stream data ke HTML
+Snippet javascript dibawah digunakan untuk menampilkan SSE event pada halaman html
+```java
+function initialize() {
+	const eventSource = new EventSource('http://localhost:8080/stream');
+	eventSource.onmessage = e => {
+		const msg = e.data;
+		document.getElementById("mycontent").innerHTML += "<br/>" + msg;
+	};
+	eventSource.onopen = e => console.log('open');
+	eventSource.onerror = e => {
+		if (e.readyState == EventSource.CLOSED) {
+			console.log('close');
+		}
+		else {
+			console.log(e);
+		}
+	};
+	eventSource.addEventListener('second', function(e) {
+		console.log('second', e.data);
+	}, false);
+}
+window.onload = initialize;
+```
+
+## Voila! Kamu sudah berhasil
+kamu dapat memcoba dengan menggunakan browser pada url berikut [http://localhost:8080]
