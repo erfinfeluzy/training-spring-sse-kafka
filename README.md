@@ -1,6 +1,7 @@
 # Tutorial Stream Kafka Topic ke Html dengan Server Sent Event (SSE) Springboot (Bahasa Indonesia)
 
-Tutorial ini akan melakukan hands on mengenai cara stream Kafka ke HTML dengan menggunakan metode Server Send Event (SSE). Dibandingkan dengan menggunakan Web Socket (ws://) adalah SSE menggunakan protokol http(s) dan satu arah, dari server ke client saja.
+Tutorial ini akan melakukan hands on mengenai cara stream Kafka ke HTML dengan menggunakan metode Server Send Event (SSE).
+Kelebihan SSE dibandingkan dengan menggunakan Web Socket (ws://) adalah SSE menggunakan protokol http(s) dan satu arah, hanya dari server ke client saja.
 
 Prerequsite tutorial ini adalah:
 - Java 8 
