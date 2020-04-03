@@ -173,7 +173,7 @@ public class StreamController {
 ```
 Hasil dapat dicek dengan menggunakan perintah curl
 ```bash
-curl http://localhost:8080/stream
+> curl http://localhost:8080/stream
 ```
 ### Stream data ke HTML
 Snippet javascript dibawah digunakan untuk menampilkan SSE event pada halaman html
