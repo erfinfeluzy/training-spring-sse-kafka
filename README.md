@@ -201,4 +201,17 @@ window.onload = initialize;
 ```
 
 ## Voila! Kamu sudah berhasil
-kamu dapat memcoba dengan menggunakan browser pada url berikut [http://localhost:8080]
+Kamu dapat memcoba dengan menggunakan browser pada url berikut [http://localhost:8080](http://localhost:8080).
+
+## Bonus! Deploy aplikasi kamu ke Red Hat Openshift
+Deploy aplikasi kamu dengan mudah menggunakan fitur Source to Image (s2i) pada OpenShift.
+> Note: install CodeReady Container (crc) untuk lebih mudah.
+```
+> oc login
+> oc new-project my-project
+> oc new-app redhat-openjdk18-openshift~https://github.com/erfinfeluzy/training-spring-sse-kafka.git 
+> oc expose svc/training-spring-sse-kafka
+> oc get route
+```
+
+hasil dari perintah *oc get route* barupa url yang dapat dibuka di browser anda.
