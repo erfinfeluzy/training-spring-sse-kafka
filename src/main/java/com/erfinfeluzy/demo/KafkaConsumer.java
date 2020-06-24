@@ -27,7 +27,7 @@ public class KafkaConsumer {
 		emitters.remove(emitter);
 	}
 
-	@KafkaListener(topics = "mytopic", groupId = "consumer-group-id-1")
+	@KafkaListener(topics = "${kafka.topic}", groupId = "consumer-group-id-1")
 	public void listen(@Payload String message, @Header(KafkaHeaders.OFFSET) String offset) {
 		
 		//process incoming message from kafka
